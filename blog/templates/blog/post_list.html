@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% for post in post_list %}
+        <article class="box">
+          <h1><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title}}</a></h1>
+          <p>投稿者:{{ post.write }}</p>
+          <p>作成日:{{ post.create_at }}</p>
+          <p>更新日:{{ post.updated_at }}</p>
+          <p>カテゴリ:{{ post.category }}</p>
+          <p>タグ:{% for tag in post.tag.all %}{{ tag }},{% endfor %}</p>
+        </article>
+    {% endfor %}
+    {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.has_previous_page_number}}">前へ</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <span>{{num}}</span>
+        {% else %}
+            <a href="?page={{num}}">{{num}}</a>
+        {% endif %}
+        {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">次へ</a>
+    {% endif %}
+
+{% endblock %}
